@@ -1,0 +1,343 @@
+---
+title: "variables aleatorias"
+author: "francisco marquez"
+date: "2025-09-22"
+output: 
+      rmdformats::readthedown
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Definicion
+una variable aleatoria $X$ se define como un mapeo de $\omega$ a los numeros reales $\mathbb{R}$. es decir, convierte el espacio muestral en un espacio numerico. por ejemplo, al tirar una moneda al aire, el espaio muestral es $\{A,S\}$ podemos definir un variable aleatoria como: 
+
+ $$
+ X_1 = \begin{cases}
+ \end{cases}
+ $$
+
+# Tipos 
+
+Existen tres tipos son 
+-continuas
+-discretas
+-mixtas
+
+Las variables aleatorias comtinuas tienen un numero aleatorio continuas tienen un numero infinito de elementos, mientras que las discretas tienen un numero finito notable contable de elementos. La variable mixta es una combinacion de una variable aleatoria continua y discreta.
+
+
+
+
+# Distribucion
+
+las variables aleatorias pueden caracterizarce mediante dos funciones; la funcion de distribucion acumulativa. $F_X(X)$ y la funcion de densidad $f_x(x)$
+
+## la funcion de distribucion acumulativa 
+La funcion de distribucion acumulativa se define como:
+
+ $$
+ F_X(X) = P_r\{X \le x\}
+ $$
+
+
+
+
+
+Ademas, cumple con las siguientes propiedades 
+
+
+ $$
+  O\le F_X(X) \le 1\\
+  \mbox{si} a < b F_X(a) \le F_X(b)\\
+  F_X(\infty) = 1
+  $$
+
+
+
+
+
+
+
+en `R`, generamos distribucones usando los comandos : 
+
+- `binom` una variable aleatoria binomial
+- `norm` variable aleatoria normal o gaussiana 
+- `pois`variable aleatoria poison
+- `exp`variable aleatoria exponencial 
+- ´unif´ variable aleatoria uniforme 
+
+ y anteponiendo un `p`por ejemplo 
+
+```{r}
+x <- seq(-4,4, length=100)
+y <-pnorm(x, mean=0, sd = 2)
+y1 <- pnorm(x, mean=2, sd =2)
+plot(y, type ="l")
+lines(y1, col="green")
+```
+
+
+## la funcion de densidad de probabilidad(pdf)
+
+la funcion de densidad de probabilidad $f_x(x)$, se define como 
+
+$$
+f_X(x) = \frac{d}{dx}\left\{F_X(x)\right\}
+$$
+de la misma manera que la distribucion$F_X(x)$, la densidad ($f_X(x)$) se puede generar ,mediante los comandos ´binom´, ´norm´, éxp´, etc, anteponiendo una ´b´, por ejemplo ´dbinom´, ´dexp´, ext 
+
+
+```{r, densidad}
+
+x <- seq(1,3, length=100) 
+y <- dexp(x, rate=2)
+y1 <- dexp(x, rate=3)
+plot(x,y, type = "l", col="purple", lwd=2, main="Distribucion exponencial")
+lines(x,y1, col="blue", lwd=3)
+
+```
+
+
+## generacion de valores de las variables aleatorias 
+para generar valores de ima distribucion usando ´R´, anteponiendo la letra´r´antes de cualquier nombre de distribucion o densidad, por ejemplo ´rbinom´, ´rnorm´, etc 
+
+```{r}
+valores <- rnorm(10000)
+uniforme <-runif(1000, -1,1)
+plot(uniforme, type= "l", col="#9bf6ff", main="Valores gaussianos", xlab="Interacion", ylab="valores",
+ylim =c(-3,3))
+lines(valores, col="#073b4c")
+```
+
+## momentos de las funciones dse densidad 
+caracterizan la posicion , ancho, asimetria, y picudes de una densidad $f_X(x)$ ENTRE LO0S MOMENTOS MAS CONOCIDOS SON LOS SIGUIENTES 
+- ,MEDIA
+-VARIANZA
+-Asimetria
+
+```{r, media}
+x <- seq(-4,4, length=100)
+y1 <- dnorm(x, mean=0, sd=1)
+y2 <- dnorm(x, mean=1, sd=1)
+plot(x,y1, type="l", col="#ffc300", lwd=2)
+lines(x,y2, col="#5e548e")
+grid(col="green", lwd =2, lty = "dotted", nx=8)
+```
+
+
+Para la varianza se tiene:
+```{r, varianza}
+x <- seq(-8,8, length=1000)
+y <- dnorm(x,mean =0, sd=1)
+y2 <- dnorm(x,sd=2)
+y3 <- dnorm(x,sd=5)
+plot(x,y, type="l", col="#778da9")
+lines(x,y2, col="#be95c4")
+lines(x,y3, col="#6a994e")
+grid(col="#83c5be", lty="dashed")
+```
+
+
+
+### momentos en el origen
+los momentos en el origen de orden $n$ se definen de la siguiente manera 
+
+$$
+\mathbb{E}\left\{X^n\right\}=
+\begin{cases}
+\sum_j{x_j^n P(X=x_j)} & \mbox{sies discreto}\\
+\int_{\mathbb{R}}{x^nf_X(x)\ dx} & \mbox{si es continuo}
+\end{cases}
+$$
+
+
+cuando $n=1$, tenemosla media 
+### momentos centrales
+
+se difinen como 
+$$
+\mathbb{E}\left\{(X-\mu)^n\right\} =
+\begin{cases}
+\sum_j{(x_j-\mu)^n P(X=x_j)} & \mbox{si es discreto}\\
+\int_{\mathbb{R}}{(x-\mu)^nf_X(x)\ dx} & \mbox{si es continuo}
+\end{cases}
+$$
+donde $\mu$ es el momento con respecto al origen de orden $1$. para $N=2$, tenemos la varianza 
+
+
+```{r, momentos}
+set.seed(100)
+x <- rnorm(n = 1000000)
+mean(x)
+var(x)
+sd(x)
+```
+
+
+
+## La Variable Aleatoria Exponencial
+
+La variable aleatoria exponencial describe el tiempo que transcurre hasta qiue ocurre un evento en un proceso de Poisson, es decir, un proceso donde los eventos ocurren en forma continua e independiente a una tasa promedio constante. Un ejemplo clasico es el tiempo hasta que una particula radioactiva se desintegra o el tiempo hasta que llega el proximo cliente a la tienda 
+
+Esta definida por un unico parametro, $\lambda$, conocido como el parametro de tasa (rate parameter), que representa el numero promedio de eventos que ocurren por unidad de tiempo.
+
+## Formulas Principales
+
+### Funcion de Densidad de Probabilidad (PDF)
+
+La PDF nos da la probabilidad relativa de que el evento ocurra en un momento exacto $x$. Para una variable aleatoria exponencial $X \sim \text(Exp)(\lambda)$, su PDF es:
+
+
+$$
+F(x; \lambda) =
+\begin{cases}
+\lambda e^{-\lambda x} & \mbox{si }x \geq 0\\
+\                      & \mbox{si}x \
+\end{cases}
+$$
+
+
+
+
+### Funcion de distribucion acumulada(CDF)
+
+La CDF nos da la probabilidad de que el evento ocurra en o antes de un tiempo $X$. Su formula es:
+
+
+
+$$
+F(x; \lambda) =
+\begin{cases}
+\sum_j{x_j^n P(X=x_j)} & \mbox{si x es discreto}\\
+\int_{\mathbb{R}}{x^nf_X(x)\ dx} & \mbox{si es continuo}
+\end{cases}
+$$
+
+Donde:
+
+ $X$ es el valor de la variable aleatoria 
+
+ $\lambda$($\lambda$ > 0) es el parametro de tasa 
+
+ $e$ es la base del logaritmo natural 
+ 
+## Grafico y Variacion del Parametro ($\lambda$)
+
+El parametro $\lambda$ controla la forma de la curva de la funcion de densidad.
+
+Si $\lambda$ es grande: Significa que los eventos ocurren con mucha frecuencia. Por lo tanto, la probabilidad de que el evento ocurra en un tiempo corto es muy alta, y la curva de la PDF cae muy rapidamente.
+
+Si $\lambda$ es pequeño: Significa que los eventos son mas raros. La probabilidad se distribuye a lo largo de un periodo de tiempo mas largo, y la curva de la PDF cae mas lentamente.
+
+Aqui tienes un grafico que ilustra como varia la PDF para diferentes valores de $\lambda$ :
+
+```{r}
+x <- seq(0,10, length=10000) 
+y <- dexp(x, rate=1.5)
+y1 <- dexp(x, rate=1)
+y2 <- dexp(x, rate = 0.5)
+plot(x,y, type = "l", col="purple", lwd=1, main="Funcipon de densidad de probabilidad (PDF) Exponencial ")
+lines(x,y1, col="blue", lwd=1)
+lines(x, y2, col="#c1121f", lwd=1)
+```
+
+## La distribucion uniforme continuo 
+
+La distribucionn uniforme continua es la mas simple de todas las distribuciones de probabilidad. Describe una situacion en la que todos los resultados dentro de un intervalo especifico son igualmente probables. Es como lanzar un dardo a una linea: la probabilidad de que caiga en cualquier punto es la misma, siempre que  este dentro de los limites 
+
+Esta definida por dos parametros, $a$ y $b$ , que representan el valor minimo y maximo del intervalo.
+
+## Formulas prinmcipales 
+
+### Funciomn de densidad de probabilidad 
+ 
+ La PDF de una distribucion uniforme es una funcion constante dentro del intervalo [$a$,$b$]    y cero en cualquier otro lugar. Esto refleja que la probabilidad es la misma para todos los valores dentro del intervalo.
+ 
+$$
+F(x) =
+\begin{cases}
+\ \frac{1}{b-a} & \mbox{para} a\ x \le 0\\
+\                0      & \mbox{para} \le  \ a \ o \ x \ \le \ b
+\end{cases}
+$$
+
+
+### Funcion de Distribucion Acumulada (CDF)
+
+La CDF describe la probabilidad de que la variable aleatoria tome un valor menor o igual a  $x$ . Crece linealmente desde 0 hasta 1 dentro del intervalo [$a$, $b$]
+
+
+
+
+$$
+F(x) =
+\begin{cases}
+\ 0 \ & \mbox{para} \ x <\ a \\
+\ \frac{x-a}{b-a}\ & \mbox{para}  \ a \le \ x \ \le \ b\
+\\ 1 & \mbox{para} \ x \ >\ b 
+\end{cases}
+$$
+
+Donde:
+
+$x$ es el valor de la variable aleatoria.
+$a$ es el limite inferior del intervalo 
+$b$ es el limite superior del intervalo 
+
+
+## Graficos y Variacion de los Parametros
+
+Los par�metros $a$ y  $b$ definen completamente la distribucion 
+
+El intervalo  $[a,b]$   determina la "posicion" y la "anchura" de la distribucion en el eje horizontal.
+ 
+La altura de la PDF, $\frac{1}{b-a}$    , es inversamente proporcional a la anchura del intervalo. Un intervalo mas ancho significa una altura menor, ya que la probabilidad total (el area) debe seguir siendo 1.
+
+
+```{r}
+a <- 2 
+b <- 8
+
+
+
+
+x <- seq(a - 2, b + 2, length.out = 1000)
+pdf <- dunif(x, min = a, max = b)
+plot(x, pdf, type = "l", lwd = 2, col ="red",
+    ylab = "Densidad",xlab = "x", main = "PDF- Uniforme")
+abline(h = 0, col = "#669bbc")
+grid(col="black", lt="dotted")
+```
+
+```{r}
+a <- 2
+b <- 8
+x<- seq(a - 2, b + 2, length.out = 1000)
+
+cdf <- punif(x, min = a, max = b)
+plot(x, cdf, type = "l", lwd = 2, col = "blue",
+     ylab = "Probabilidad acumulada", xlab = "x", main = "CDF - uniforme")
+abline(h = c(0, 1.1), col = "gray", lty = 2)
+grid(col="black", lt = "dotted")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
